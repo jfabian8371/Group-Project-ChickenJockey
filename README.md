@@ -10,4 +10,4 @@ Currently planning for 5 main enemy types with different AI for each, as well as
 * Aidan: Weapons, enemies
 * Liam: Store, calculating balanced enemy scaling
 * Bryan: Weapons, enemies, shaders
-* Rodger: UI, hud
+* Roger: UI, hud
