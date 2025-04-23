@@ -11,3 +11,18 @@ Currently planning for 5 main enemy types with different AI for each, as well as
 * Liam: Store, calculating balanced enemy scaling
 * Bryan: Weapons, enemies, shaders
 * Roger: UI, hud
+
+
+Tentative plan for the powerup/hud screen between rounds:
+Offered powerups:
+restore health, increase max health, get fixed amount of armor (percent reduction or temp health), inc move speed, inc damage, fire rate, new gun, Bullet variety, ie (exploding , slower but bigger, more damage but smaller, etc)
+
+For the screen itself, put it on a wall or in the center of the arena
+Just needs buttons for : new round, purchase item (one for each) , activated by shooting the buttons.
+
+offered powerups/items should follow:
+	guaranteed to offer restore health
+	2 or 3 others chosen from a pool 
+		1 for defense
+		1 for offense 
+		new gun or extra offensive perk if all guns owned
