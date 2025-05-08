@@ -9,6 +9,7 @@ public class MeleeWeapon : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip swingSound;
     public GameObject hitEffect;
+    public Animator animator;
 
     private float nextAttackTime = 0f;
 
@@ -23,25 +24,33 @@ public class MeleeWeapon : MonoBehaviour
 
     void Attack()
     {
-        // Play sound
+        // 🔊 Play swing sound
         if (audioSource && swingSound)
             audioSource.PlayOneShot(swingSound);
 
-        // Raycast in front of camera to simulate hit
+        // 🎬 Trigger swing animation
+        if (animator)
+            animator.SetTrigger("Swing");
+
+        // 🎯 Raycast to detect hit
         Ray ray = fpsCam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         if (Physics.Raycast(ray, out RaycastHit hit, range))
         {
             Debug.Log("Axe hit: " + hit.collider.name);
 
+            // 💥 Spawn hit effect
             if (hitEffect)
             {
                 GameObject effect = Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
                 Destroy(effect, 1f);
             }
 
-            // Optional: Apply damage
-            // var health = hit.collider.GetComponent<EnemyHealth>();
-            // if (health != null) health.TakeDamage(damage);
+            // 🧠 Trigger enemy reaction
+            EnemyReaction enemy = hit.collider.GetComponent<EnemyReaction>();
+            if (enemy != null)
+            {
+                enemy.ReactToHit();
+            }
         }
     }
 }
