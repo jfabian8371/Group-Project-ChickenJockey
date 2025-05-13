@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 107508534}
   - component: {fileID: 107508533}
   - component: {fileID: 107508536}
+  - component: {fileID: 107508537}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -206,7 +207,7 @@ Transform:
   m_GameObject: {fileID: 107508532}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.1, y: 3.4, z: -26.7}
+  m_LocalPosition: {x: 0.01, y: 0.11, z: -0.152}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -363,6 +364,10 @@ MonoBehaviour:
   agent: {fileID: 0}
   speedIncrease: 0.5
   maxSpeed: 6
+  audioSource: {fileID: 0}
+  hitSound: {fileID: 0}
+  scaleIncrease: 0.1
+  maxScale: 3
 --- !u!114 &210684204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3696,6 +3701,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 231035420361311481, guid: 429791a28391deb4eb40d69a6a8c4e2f, type: 3}
+      propertyPath: playerBody
+      value: 
+      objectReference: {fileID: 687132843}
     - target: {fileID: 549173385074072458, guid: 429791a28391deb4eb40d69a6a8c4e2f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.91
@@ -3962,7 +3971,6 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 107508535}
   - {fileID: 622637639}
   - {fileID: 2056018746}
   - {fileID: 1261488268}
@@ -3970,4 +3978,3 @@ SceneRoots:
   - {fileID: 1559954653}
   - {fileID: 1034806056}
   - {fileID: 702839065}
-
