@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4da1194152c6afb48bc692b4db10a2c2
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 296564
+  packageName: Monster Bear (Free)
+  packageVersion: 1.0
+  assetPath: Assets/DreamGrid/Characters/Bear/Animations/Bear_Death.anim
+  uploadId: 693840

@@ -131,7 +131,6 @@ GameObject:
   - component: {fileID: 107508534}
   - component: {fileID: 107508533}
   - component: {fileID: 107508536}
-  - component: {fileID: 107508537}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -206,8 +205,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 107508532}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.09, z: -0.19}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.1, y: 3.4, z: -26.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3963,6 +3962,7 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 107508535}
   - {fileID: 622637639}
   - {fileID: 2056018746}
   - {fileID: 1261488268}
@@ -3970,3 +3970,4 @@ SceneRoots:
   - {fileID: 1559954653}
   - {fileID: 1034806056}
   - {fileID: 702839065}
+
