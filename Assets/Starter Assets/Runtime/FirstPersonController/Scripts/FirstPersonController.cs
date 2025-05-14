@@ -60,8 +60,13 @@ namespace StarterAssets
 		private float _verticalVelocity;
 		private float _terminalVelocity = 53.0f;
 
-		// timeout deltatime
-		private float _jumpTimeoutDelta;
+        // Keep track of base speeds to apply percentage increases correctly
+        private float _baseMoveSpeed;
+        private float _baseSprintSpeed;
+        private float _currentMovementSpeedMultiplier = 1.0f; // Starts at 100%
+
+        // timeout deltatime
+        private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
 
 	
@@ -93,17 +98,21 @@ namespace StarterAssets
 			{
 				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 			}
-		}
+
+            // Store base speeds on Awake
+            _baseMoveSpeed = MoveSpeed;
+            _baseSprintSpeed = SprintSpeed;
+        }
 
 		private void Start()
 		{
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
-#if ENABLE_INPUT_SYSTEM
+			#if ENABLE_INPUT_SYSTEM
 			_playerInput = GetComponent<PlayerInput>();
-#else
+			#else
 			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
-#endif
+			#endif
 
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
@@ -264,5 +273,20 @@ namespace StarterAssets
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
 		}
-	}
+
+        // --- NEW METHOD FOR UPGRADE ---
+        public void IncreaseMovementSpeed(float percentageIncrease) // percentageIncrease is 0.0 to 1.0 (e.g., 0.1 for 10%)
+        {
+            if (percentageIncrease <= 0) return;
+
+            _currentMovementSpeedMultiplier += percentageIncrease;
+
+            // Apply the new multiplier to the base speeds
+            MoveSpeed = _baseMoveSpeed * _currentMovementSpeedMultiplier;
+            SprintSpeed = _baseSprintSpeed * _currentMovementSpeedMultiplier;
+
+            Debug.Log($"Movement speed increased by {percentageIncrease * 100}%. New MoveSpeed: {MoveSpeed}, New SprintSpeed: {SprintSpeed}");
+        }
+        // --- END OF NEW METHOD ---
+    }
 }
