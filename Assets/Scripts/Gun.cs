@@ -7,13 +7,33 @@ public class Gun : MonoBehaviour
     public Camera fpsCam;
     public AudioSource audioSource;
     public AudioClip fireSound;
+    public AudioClip reloadSound;
     public GameObject impactEffectPrefab;
 
-    public float fireCooldown = 0.25f; // delay between shots (clicks)
+    public float fireCooldown = 0.25f;
     private float nextFireTime = 0f;
+
+    public int clipSize = 10;
+    private int currentAmmo;
+    public float reloadTime = 1.5f;
+    private bool isReloading = false;
+
+    void Start()
+    {
+        currentAmmo = clipSize;
+    }
 
     void Update()
     {
+        if (isReloading)
+            return;
+
+        if (currentAmmo <= 0 || Input.GetKeyDown(KeyCode.R))
+        {
+            StartCoroutine(Reload());
+            return;
+        }
+
         if (Input.GetButtonDown("Fire1") && Time.time >= nextFireTime)
         {
             nextFireTime = Time.time + fireCooldown;
@@ -21,8 +41,29 @@ public class Gun : MonoBehaviour
         }
     }
 
+    System.Collections.IEnumerator Reload()
+    {
+        isReloading = true;
+        Debug.Log("Reloading...");
+
+        if (reloadSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(reloadSound);
+        }
+
+        yield return new WaitForSeconds(reloadTime);
+
+        currentAmmo = clipSize;
+        isReloading = false;
+    }
+
     void Shoot()
     {
+        if (currentAmmo <= 0)
+            return;
+
+        currentAmmo--;
+
         if (fireSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(fireSound);
