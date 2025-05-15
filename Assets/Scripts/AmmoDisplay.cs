@@ -11,13 +11,13 @@ public class AmmoDisplay : MonoBehaviour
         if (gun == null || ammoText == null)
             return;
 
-        if (gun.IsReloading)
+        if (gun.IsReloadingPub)
         {
             ammoText.text = "Reload";
         }
         else
         {
-            ammoText.text = $"{gun.CurrentAmmo} / {gun.clipSize}";
+            ammoText.text = $"{gun.CurrentAmmoPub} / {gun.clipSize}";
         }
     }
 }
