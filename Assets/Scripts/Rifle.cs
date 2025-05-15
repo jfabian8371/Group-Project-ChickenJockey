@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Rifle : MonoBehaviour
 {
@@ -8,12 +9,33 @@ public class Rifle : MonoBehaviour
     public Camera fpsCam;
     public AudioSource audioSource;
     public AudioClip fireSound;
+    public AudioClip reloadSound;
     public GameObject impactEffectPrefab;
+
+    public int clipSize = 30;
+    private int currentAmmo;
+    public float reloadTime = 2f;
+    private bool isReloading = false;
 
     private float nextTimeToFire = 0f;
 
+    void Start()
+    {
+        currentAmmo = clipSize;
+    }
+
     void Update()
     {
+        if (isReloading)
+            return;
+
+        // Manual reload or auto reload if empty
+        if (currentAmmo <= 0 || Input.GetKeyDown(KeyCode.R))
+        {
+            StartCoroutine(Reload());
+            return;
+        }
+
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
         {
             nextTimeToFire = Time.time + 1f / fireRate;
@@ -21,8 +43,29 @@ public class Rifle : MonoBehaviour
         }
     }
 
+    IEnumerator Reload()
+    {
+        isReloading = true;
+        Debug.Log("Reloading...");
+
+        if (reloadSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(reloadSound);
+        }
+
+        yield return new WaitForSeconds(reloadTime);
+
+        currentAmmo = clipSize;
+        isReloading = false;
+    }
+
     void Shoot()
     {
+        if (currentAmmo <= 0)
+            return;
+
+        currentAmmo--;
+
         if (fireSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(fireSound);
