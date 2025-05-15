@@ -58,10 +58,10 @@ public class MeleeWeapon : MonoBehaviour
             }
 
             // 🧠 React to hit if enemy
-            EnemyReaction enemy = hit.collider.GetComponent<EnemyReaction>();
-            if (enemy != null)
+            GhostEnemyReaction ghostEnemyReaction = hit.collider.GetComponent<GhostEnemyReaction>();
+            if (ghostEnemyReaction != null)
             {
-                enemy.ReactToHit(); // Replace with enemy.TakeDamage(damage) if needed
+                ghostEnemyReaction.ReactToHit();
             }
         }
     }
