@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 5219456068718763491}
   - component: {fileID: -418860407155860060}
   m_Layer: 0
-  m_Name: Ant_Red
+  m_Name: FINAL_Ant_Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
