@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Group Project.sln"
+    "dotnet.defaultSolution": "Group-Project-ChickenJockey.sln"
 }
