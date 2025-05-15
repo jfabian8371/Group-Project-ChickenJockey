@@ -138,6 +138,12 @@ public class Rifle : MonoBehaviour
                     Destroy(impactGO, 1f);
                 }
 
+                EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();
+                if (enemyHealth != null)
+                {
+                    enemyHealth.TakeDamage(currentDamage);
+                }
+
                 GhostEnemyReaction ghostEnemyReaction = hit.collider.GetComponent<GhostEnemyReaction>();
                 if (ghostEnemyReaction != null)
                 {
