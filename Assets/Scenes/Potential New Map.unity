@@ -866,6 +866,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bullet icon
       objectReference: {fileID: 0}
+    - target: {fileID: 2033045968856843084, guid: 2da8cf4d2110349409930f921b2de97a, type: 3}
+      propertyPath: m_Name
+      value: Ammo Count
+      objectReference: {fileID: 0}
     - target: {fileID: 2852495630922549815, guid: 2da8cf4d2110349409930f921b2de97a, type: 3}
       propertyPath: m_Name
       value: Enemy Text
@@ -2258,17 +2262,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3727135578150502740, guid: 542c295face4faa4da9ba5c48b017d2d, type: 3}
   m_PrefabInstance: {fileID: 36144702942039817}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &890674240 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3717163615107943299, guid: 542c295face4faa4da9ba5c48b017d2d, type: 3}
-  m_PrefabInstance: {fileID: 36144702942039817}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 890674237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0a903b19513d48d7bcf4723faeabb9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &932193875
 GameObject:
   m_ObjectHideFlags: 0
@@ -2660,7 +2653,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e816b9267c0e44408a329d149c60197, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gun: {fileID: 890674240}
+  weaponSwitcher: {fileID: 1571748584}
   ammoText: {fileID: 1087305398}
 --- !u!1001 &1095848894
 PrefabInstance:
@@ -4741,6 +4734,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 55316921663112706, guid: 542c295face4faa4da9ba5c48b017d2d, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: 823cf87589cbc37418eef507333f00bf, type: 3}
     - target: {fileID: 299844722011911524, guid: 542c295face4faa4da9ba5c48b017d2d, type: 3}
       propertyPath: reloadSound
       value: 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Rifle : MonoBehaviour
+public class Rifle : MonoBehaviour, IWeapon
 {
     public float range = 100f;
     public float damage = 10f;
@@ -11,6 +11,10 @@ public class Rifle : MonoBehaviour
     public AudioClip fireSound;
     public AudioClip reloadSound;
     public GameObject impactEffectPrefab;
+
+    public bool IsReloading => isReloading;
+    public int CurrentAmmo => currentAmmo;
+    public int ClipSize => clipSize;
 
     public int clipSize = 30;
     private int currentAmmo;

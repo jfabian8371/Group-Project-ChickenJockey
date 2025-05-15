@@ -1,14 +1,15 @@
 // Gun.cs
 using UnityEngine;
 
-public class Gun : MonoBehaviour
+public class Gun : MonoBehaviour, IWeapon
 {
     [Header("Base Stats")]
     public float range = 100f;
     public float baseDamage = 10f;
     public float baseFireCooldown = 0.25f;
-    public int CurrentAmmo => currentAmmo;
     public bool IsReloading => isReloading;
+    public int CurrentAmmo => currentAmmo;
+    public int ClipSize => clipSize;
 
 
     [Header("Runtime Stats")]

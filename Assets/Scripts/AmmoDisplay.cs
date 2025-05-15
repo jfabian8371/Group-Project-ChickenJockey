@@ -1,23 +1,41 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 public class AmmoDisplay : MonoBehaviour
 {
-    public Gun gun; // Drag your Gun object here in the Inspector
+    public WeaponSwitcher weaponSwitcher; // Assign in Inspector
     public TMP_Text ammoText;
 
-    private void Update()
-    {
-        if (gun == null || ammoText == null)
-            return;
+    private IWeapon currentWeapon;
 
-        if (gun.IsReloading)
+    void Update()
+    {
+        GameObject activeWeapon = GetActiveWeapon();
+        if (activeWeapon == null || ammoText == null)
         {
-            ammoText.text = "Reload";
+            ammoText.text = "";
+            return;
         }
-        else
+
+        currentWeapon = activeWeapon.GetComponent<IWeapon>();
+        if (currentWeapon == null)
         {
-            ammoText.text = $"{gun.CurrentAmmo} / {gun.clipSize}";
+            ammoText.text = "∞"; // For melee weapons
+            return;
         }
+
+        ammoText.text = currentWeapon.IsReloading
+            ? "Reload"
+            : $"{currentWeapon.CurrentAmmo} / {currentWeapon.ClipSize}";
+    }
+
+    private GameObject GetActiveWeapon()
+    {
+        foreach (GameObject weapon in weaponSwitcher.weapons)
+        {
+            if (weapon != null && weapon.activeSelf)
+                return weapon;
+        }
+        return null;
     }
 }
