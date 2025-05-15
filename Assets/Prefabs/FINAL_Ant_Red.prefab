@@ -171,6 +171,7 @@ GameObject:
   - component: {fileID: 6398245302402683792}
   - component: {fileID: 5219456068718763491}
   - component: {fileID: -418860407155860060}
+  - component: {fileID: -7222481302861190244}
   m_Layer: 0
   m_Name: FINAL_Ant_Red
   m_TagString: Untagged
@@ -273,6 +274,21 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &-7222481302861190244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006988486051157077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0407356175519d746ab56556b7d56812, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 40
+  currentHealth: 40
+  healthManager: {fileID: 0}
 --- !u!1 &1086531069829984439
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,7 +20,7 @@ public class EnemyHealthManager : MonoBehaviour
         {
             totalEnemyHealth += enemy.maxHealth;
             currentEnemyHealth += enemy.currentHealth;
-            enemy.manager = this;
+            enemy.healthManager = this;
         }
 
         enemiesRemaining = enemies.Length;
@@ -88,7 +88,7 @@ public class EnemyHealthManager : MonoBehaviour
         {
             totalEnemyHealth += enemy.maxHealth;
             currentEnemyHealth += enemy.currentHealth;
-            enemy.manager = this;
+            enemy.healthManager = this;
         }
 
         // Make sure the health bar and text are visible again

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyReaction : MonoBehaviour
+public class GhostEnemyReaction : MonoBehaviour
 {
     public NavMeshAgent agent;
     public float speedIncrease = 0.5f;
