@@ -130,7 +130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 50
   currentHealth: 50
-  healthManager: {fileID: 0}
+  healthManager: {fileID: 4456720052369538386, guid: cbaf6cae3cf786c4f85a42851cc1350f, type: 3}
 --- !u!195 &4416529511914728968
 NavMeshAgent:
   m_ObjectHideFlags: 0
