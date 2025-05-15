@@ -2,26 +2,26 @@ using UnityEngine;
 
 public class TestPlayerHealth : MonoBehaviour
 {
-    public PlayerHealthManager healthManager;
+    public PlayerHealth playerHealth;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.I))
         {
-            healthManager.TakeDamage(10f);
+            playerHealth.TakeDamage(10f);
             Debug.Log("Player took 10 damage.");
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.O))
         {
-            healthManager.Heal(10f);
+            playerHealth.Heal(10f);
             Debug.Log("Player healed 10 health.");
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            healthManager.RechargeShield(10f);
-            Debug.Log("Player recharged 10 shield.");
+            playerHealth.HealToFull();
+            Debug.Log("Player healed to full.");
         }
     }
 }

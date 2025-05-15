@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHealth
+public class PlayerHealthRoger
 {
     public float Health, MaxHealth, Width, Height;
 

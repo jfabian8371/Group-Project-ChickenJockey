@@ -7,22 +7,36 @@ public class PlayerHealthManager : MonoBehaviour
     public RectTransform healthBar;
     public RectTransform shieldBar;
 
-    [Header("Settings")]
-    public float maxHealth = 100f;
+    [Header("Shield Settings")]
     public float maxShield = 100f;
+    public float barWidth = 155f;
 
-    public float barWidth = 155;  // Total width to stay within
-    public float barHeight = 20f;
-
-    private float currentHealth;
     private float currentShield;
+
+    private PlayerHealth playerHealth;
+
+    private void Awake()
+    {
+        playerHealth = GetComponent<PlayerHealth>();
+        if (playerHealth == null)
+        {
+            Debug.LogError("PlayerHealth component not found on the same GameObject.");
+            return;
+        }
+
+        currentShield = maxShield;
+        playerHealth.OnHealthChanged += UpdateHealthBar;
+    }
 
     private void Start()
     {
-        currentHealth = maxHealth;
-        currentShield = maxShield;
-
         UpdateBars();
+    }
+
+    private void OnDestroy()
+    {
+        if (playerHealth != null)
+            playerHealth.OnHealthChanged -= UpdateHealthBar;
     }
 
     public void TakeDamage(float amount)
@@ -34,16 +48,13 @@ public class PlayerHealthManager : MonoBehaviour
             amount -= shieldDamage;
         }
 
-        currentHealth -= amount;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-
+        playerHealth.TakeDamage(amount);
         UpdateBars();
     }
 
     public void Heal(float amount)
     {
-        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        UpdateBars();
+        playerHealth.Heal(amount);
     }
 
     public void RechargeShield(float amount)
@@ -52,13 +63,15 @@ public class PlayerHealthManager : MonoBehaviour
         UpdateBars();
     }
 
+    private void UpdateHealthBar(float currentHealth, float maxHealth)
+    {
+        float healthRatio = currentHealth / maxHealth;
+        healthBar.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, healthRatio * barWidth);
+    }
+
     private void UpdateBars()
     {
-        if (healthBar != null)
-        {
-            float healthRatio = currentHealth / maxHealth;
-            healthBar.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, healthRatio * barWidth);
-        }
+        UpdateHealthBar(playerHealth.CurrentHealth, playerHealth.MaxHealth);
 
         if (shieldBar != null)
         {
