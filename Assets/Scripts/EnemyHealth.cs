@@ -14,7 +14,7 @@ public class EnemyHealth : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             TakeDamage(1f);
         }
@@ -36,8 +36,12 @@ public class EnemyHealth : MonoBehaviour
 
     private void Die()
     {
-        // Optional: Add effects, sounds, score logic here
+        if (manager != null)
+        {
+            manager.ReportEnemyDeath(currentHealth);
+        }
 
         Destroy(gameObject);
     }
+
 }
