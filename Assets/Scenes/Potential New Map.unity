@@ -4431,6 +4431,10 @@ PrefabInstance:
       value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 2072692179261496146, guid: 542c295face4faa4da9ba5c48b017d2d, type: 3}
+      propertyPath: fireSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 2f7ad77b40dee8d7e9dbeb010e784837, type: 3}
+    - target: {fileID: 2072692179261496146, guid: 542c295face4faa4da9ba5c48b017d2d, type: 3}
       propertyPath: reloadTime
       value: 1.5
       objectReference: {fileID: 0}
