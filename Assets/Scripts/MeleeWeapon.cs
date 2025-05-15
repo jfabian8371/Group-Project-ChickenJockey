@@ -57,6 +57,12 @@ public class MeleeWeapon : MonoBehaviour
                 Destroy(effect, 1f);
             }
 
+            EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                enemyHealth.TakeDamage(damage);
+            }
+                
             // 🧠 React to hit if enemy
             GhostEnemyReaction ghostEnemyReaction = hit.collider.GetComponent<GhostEnemyReaction>();
             if (ghostEnemyReaction != null)
