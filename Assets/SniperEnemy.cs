@@ -14,6 +14,7 @@ public class SniperEnemy : MonoBehaviour
     private float shootTimer;
     private Animator animator;         // <-- NEW
 
+
     void Start()
     {
         animator = GetComponent<Animator>(); // Get the Animator on this GameObject
@@ -59,6 +60,7 @@ public class SniperEnemy : MonoBehaviour
         // Shooting logic
         if (distance <= attackDistance && distance >= retreatDistance)
         {
+            
             shootTimer += Time.deltaTime;
             if (shootTimer >= shootInterval)
             {
@@ -73,15 +75,32 @@ public class SniperEnemy : MonoBehaviour
     }
 
     void Shoot()
+{
+    if (sniperBulletPrefab && firePoint)
     {
-        if (sniperBulletPrefab && firePoint)
+        GameObject bullet = Instantiate(sniperBulletPrefab, firePoint.position, firePoint.rotation);
+
+        // Set target on the bullet
+        SniperBullet bulletScript = bullet.GetComponent<SniperBullet>();
+        if (bulletScript != null && player != null)
         {
-            GameObject bullet = Instantiate(sniperBulletPrefab, firePoint.position, firePoint.rotation);
-            Rigidbody rb = bullet.GetComponent<Rigidbody>();
-            if (rb)
-            {
-                rb.linearVelocity = firePoint.forward * bulletSpeed;
-            }
+            // Try to find a child transform like "Armature" or "Head"
+            Transform aimTarget = player.Find("Armature"); // Change this to match your actual rig
+
+            // Fallback if not found
+            if (aimTarget == null)
+                aimTarget = player;
+
+            bulletScript.target = aimTarget;
+        }
+
+        // Optional: give initial velocity (for appearance or physics effects)
+        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        if (rb)
+        {
+            rb.linearVelocity = firePoint.forward * bulletSpeed;
         }
     }
+}
+
 }
