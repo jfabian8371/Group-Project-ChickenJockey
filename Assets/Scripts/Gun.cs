@@ -131,11 +131,16 @@ public class Gun : MonoBehaviour
                     Destroy(impactGO, 1f);
                 }
 
-                EnemyReaction enemy = hit.collider.GetComponent<EnemyReaction>();
-                if (enemy != null)
+                EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();
+                if (enemyHealth != null)
                 {
-                    // enemy.TakeDamage(currentDamage);
-                    enemy.ReactToHit();
+                    enemyHealth.TakeDamage(currentDamage);
+                }
+                
+                GhostEnemyReaction ghostEnemyReaction = hit.collider.GetComponent<GhostEnemyReaction>();
+                if (ghostEnemyReaction != null)
+                {
+                    ghostEnemyReaction.ReactToHit();
                 }
             }
             else

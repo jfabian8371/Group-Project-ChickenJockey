@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    public float maxHealth = 10f;
+    public float maxHealth = 100f;
     public float currentHealth;
 
-    public EnemyHealthManager manager;
+    public EnemyHealthManager healthManager;
 
     private void Start()
     {
@@ -26,7 +26,7 @@ public class EnemyHealth : MonoBehaviour
         currentHealth -= amount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
-        manager.ReportDamage(amount);
+        healthManager.ReportDamage(amount);
 
         if (currentHealth <= 0f)
         {
@@ -36,9 +36,9 @@ public class EnemyHealth : MonoBehaviour
 
     private void Die()
     {
-        if (manager != null)
+        if (healthManager != null)
         {
-            manager.ReportEnemyDeath(currentHealth);
+            healthManager.ReportEnemyDeath(currentHealth);
         }
 
         Destroy(gameObject);

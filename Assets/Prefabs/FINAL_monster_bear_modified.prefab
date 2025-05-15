@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
       propertyPath: m_Name
-      value: monster_bear_modified
+      value: FINAL_monster_bear_modified
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
       propertyPath: m_Controller
@@ -63,6 +63,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4201465377495593728}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -4426047926015722816}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5514400965158569145}
@@ -94,6 +97,21 @@ MonoBehaviour:
   attackRange: 2.5
   attackCooldown: 3
   attackRecoveryDuration: 2
+--- !u!114 &-4426047926015722816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8795692897192201966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0407356175519d746ab56556b7d56812, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 500
+  currentHealth: 500
+  healthManager: {fileID: 0}
 --- !u!195 &5514400965158569145
 NavMeshAgent:
   m_ObjectHideFlags: 0
