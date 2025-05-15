@@ -1,9 +1,7 @@
-// UpgradeUIManager.cs
 using UnityEngine;
-// using UnityEngine.UI; // Button component might not be directly used for clicks anymore
 using TMPro;
 using System.Collections.Generic;
-using System.Linq;
+using System.Linq; // For Shuffle, though simple swap is used currently
 
 public class UpgradeUIManager : MonoBehaviour
 {
@@ -17,14 +15,9 @@ public class UpgradeUIManager : MonoBehaviour
 
     [Tooltip("Assign the 4 TextMeshProUGUI elements for displaying upgrade names/details, corresponding to shootableChoices.")]
     public TextMeshProUGUI[] choiceDisplayTexts = new TextMeshProUGUI[4];
-    // Optional: If you want to color the background of the text or a panel behind the text
-    // public UnityEngine.UI.Image[] choiceBackgroundImages = new UnityEngine.UI.Image[4];
-
 
     private List<UpgradeDefinition> allPossibleRandomUpgrades = new List<UpgradeDefinition>();
     private UpgradeDefinition healToFullUpgrade;
-
-    // No longer storing currentDisplayedUpgrades list here, as UpgradeChoiceActivator holds its own.
 
     private int picksAllowed;
     private int picksMade;
@@ -40,20 +33,15 @@ public class UpgradeUIManager : MonoBehaviour
             Debug.LogError("UpgradeUIManager requires exactly 4 Shootable Choices and 4 Choice Display Texts assigned!");
             return;
         }
-        // Optional: Check for background images length if you use them
-        // if (choiceBackgroundImages.Length != 0 && choiceBackgroundImages.Length != 4) { ... }
 
-
-        InitializeUpgradeDefinitions();
+        InitializeUpgradeDefinitions(); // Call this in Awake
         if (upgradePanelContainer) upgradePanelContainer.SetActive(false);
 
-        // Ensure all shootable choices are initially reset and potentially hidden if part of the panel
         for (int i = 0; i < shootableChoices.Length; i++)
         {
             if (shootableChoices[i] != null)
             {
-                shootableChoices[i].ResetChoice(); // Initialize them
-                // shootableChoices[i].gameObject.SetActive(false); // If they should only appear when populated
+                shootableChoices[i].ResetChoice();
             }
             else
             {
@@ -64,13 +52,42 @@ public class UpgradeUIManager : MonoBehaviour
 
     void InitializeUpgradeDefinitions()
     {
-        healToFullUpgrade = new UpgradeDefinition("heal_full", UpgradeType.HealToFull, "Heal to Full", 0f);
+        allPossibleRandomUpgrades.Clear(); // Clear before repopulating if called multiple times (though usually just once in Awake)
 
+        // Heal to Full (always specific)
+        healToFullUpgrade = new UpgradeDefinition(
+            "heal_full",
+            UpgradeType.HealToFull,
+            "Heal to Full",
+            0f // Value not used for rarity scaling
+        );
+        // Note: healToFullUpgrade is NOT added to allPossibleRandomUpgrades list
+
+        // Player-specific upgrades
         allPossibleRandomUpgrades.Add(new UpgradeDefinition("max_health_boost", UpgradeType.IncreaseMaxHealth, "+{0} Max Health", 10f));
         allPossibleRandomUpgrades.Add(new UpgradeDefinition("dmg_reduction", UpgradeType.DamageReduction, "+{0}% Damage Reduction", 5f));
-        allPossibleRandomUpgrades.Add(new UpgradeDefinition("move_speed_boost", UpgradeType.MovementSpeed, "+{0}% Movement Speed", 10f));
-        allPossibleRandomUpgrades.Add(new UpgradeDefinition("gun_dmg_boost", UpgradeType.Damage, "+{0}% Gun Damage", 10f));
-        allPossibleRandomUpgrades.Add(new UpgradeDefinition("gun_fire_rate_boost", UpgradeType.FireRate, "+{0}% Gun Fire Rate", 15f));
+        allPossibleRandomUpgrades.Add(new UpgradeDefinition("move_speed_boost", UpgradeType.MovementSpeed, "+{0}% Movement Speed", 7f)); // Was 10%, example value change
+
+        // --- MODIFIED FOR GLOBAL WEAPON UPGRADES ---
+        // Generic damage and fire rate upgrades that apply to all weapons
+        allPossibleRandomUpgrades.Add(new UpgradeDefinition(
+            "global_damage_boost", // Generic ID
+            UpgradeType.Damage,
+            "+{0}% All Weapon Damage", // Updated display name
+            10f // Base common value for the global damage %
+        ));
+        allPossibleRandomUpgrades.Add(new UpgradeDefinition(
+            "global_fire_rate_boost", // Generic ID
+            UpgradeType.FireRate,
+            "+{0}% All Weapon Fire Rate", // Updated display name
+            15f // Base common value for the global fire rate %
+        ));
+        // --- END OF MODIFICATION ---
+
+        // REMOVE old weapon-specific upgrade definitions if they are now global:
+        // allPossibleRandomUpgrades.RemoveAll(ud => ud.upgradeID == "gun_dmg_boost");
+        // allPossibleRandomUpgrades.RemoveAll(ud => ud.upgradeID == "gun_fire_rate_boost");
+        // (Or just don't add them in the first place as done above)
     }
 
     public void InitializeManagerReferences(GameManager gm, WallController wc, PlayerHealth ph)
@@ -83,9 +100,9 @@ public class UpgradeUIManager : MonoBehaviour
 
     public void PrepareAndShowUpgradeScreen(int numberOfPicks)
     {
-        if (!instructionText || shootableChoices.Length != 4 || !playerHealth)
+        if (!instructionText || shootableChoices.Length != 4 || !playerHealth || gameManager == null) // Added gameManager null check
         {
-            Debug.LogError("Upgrade UI elements not fully assigned or PlayerHealth missing!", this);
+            Debug.LogError("Upgrade UI elements not fully assigned or core references (PlayerHealth/GameManager) missing!", this);
             if (wallController) wallController.HideWallAndProceed();
             return;
         }
@@ -94,125 +111,105 @@ public class UpgradeUIManager : MonoBehaviour
         picksMade = 0;
         instructionText.text = $"Pick {picksAllowed} upgrade(s)";
 
-        // Reset all choices first
         foreach (UpgradeChoiceActivator choiceActivator in shootableChoices)
         {
             if (choiceActivator != null) choiceActivator.ResetChoice();
         }
 
-        // --- Slot 0: Always Heal to Full ---
-        healToFullUpgrade.DetermineAndSetInstanceDetails(useRandomRarity: false);
+        // Slot 0: Always Heal to Full
+        healToFullUpgrade.DetermineAndSetInstanceDetails(useRandomRarity: false); // No random rarity for heal
         SetupChoiceVisuals(shootableChoices[0], choiceDisplayTexts[0], healToFullUpgrade);
-        // Optional: SetupChoiceVisuals(shootableChoices[0], choiceDisplayTexts[0], choiceBackgroundImages[0], healToFullUpgrade);
 
-        // --- Slots 1, 2, 3: Random Upgrades ---
+        // Slots 1, 2, 3: Random Upgrades
         List<UpgradeDefinition> tempAvailableUpgrades = new List<UpgradeDefinition>(allPossibleRandomUpgrades);
+
         if (playerHealth.IsDamageReductionCapped())
         {
             tempAvailableUpgrades.RemoveAll(ud => ud.type == UpgradeType.DamageReduction);
         }
+        // Optional: Add similar cap checks for globalDamageMultiplier and globalFireRateMultiplier if you want to cap them
+        // Example: if (gameManager.globalDamageMultiplier >= 2.0f) // If global damage multiplier reached 200% (base + 100% bonus)
+        //          { tempAvailableUpgrades.RemoveAll(ud => ud.type == UpgradeType.Damage); }
 
-        for (int i = 0; i < tempAvailableUpgrades.Count - 1; i++) // Fisher-Yates shuffle part
+
+        // Simple shuffle (Fisher-Yates is better for true randomness but this is often sufficient)
+        for (int i = 0; i < tempAvailableUpgrades.Count - 1; i++)
         {
             int randomIndex = Random.Range(i, tempAvailableUpgrades.Count);
+            // Swap
             (tempAvailableUpgrades[i], tempAvailableUpgrades[randomIndex]) = (tempAvailableUpgrades[randomIndex], tempAvailableUpgrades[i]);
         }
 
         for (int i = 1; i < 4; i++) // For choices 1, 2, and 3
         {
-            if (shootableChoices[i] == null) continue; // Skip if a choice slot is unassigned
+            if (shootableChoices[i] == null || choiceDisplayTexts[i] == null) continue;
 
-            if (tempAvailableUpgrades.Count > (i - 1))
+            if (tempAvailableUpgrades.Count > (i - 1)) // i-1 because we're picking for slot 1, 2, 3 from the shuffled list
             {
-                UpgradeDefinition chosenDefinition = tempAvailableUpgrades[i - 1];
+                UpgradeDefinition sourceDefinition = tempAvailableUpgrades[i - 1];
+                // Create a new instance for this specific display roll to hold its unique rarity/value
                 UpgradeDefinition rolledUpgrade = new UpgradeDefinition(
-                    chosenDefinition.upgradeID, chosenDefinition.type,
-                    chosenDefinition.baseDisplayName, chosenDefinition.commonValue
+                    sourceDefinition.upgradeID,
+                    sourceDefinition.type,
+                    sourceDefinition.baseDisplayName,
+                    sourceDefinition.commonValue
                 );
-                rolledUpgrade.DetermineAndSetInstanceDetails();
+                rolledUpgrade.DetermineAndSetInstanceDetails(); // Roll rarity and set final values
 
                 SetupChoiceVisuals(shootableChoices[i], choiceDisplayTexts[i], rolledUpgrade);
-                // Optional: SetupChoiceVisuals(shootableChoices[i], choiceDisplayTexts[i], choiceBackgroundImages[i], rolledUpgrade);
                 shootableChoices[i].gameObject.SetActive(true);
             }
             else
             {
                 shootableChoices[i].gameObject.SetActive(false);
-                if (choiceDisplayTexts[i] != null) choiceDisplayTexts[i].text = ""; // Clear text
-                // if (choiceBackgroundImages[i] != null) choiceBackgroundImages[i].gameObject.SetActive(false);
+                choiceDisplayTexts[i].text = ""; // Clear text if no upgrade for this slot
             }
         }
         if (upgradePanelContainer) upgradePanelContainer.SetActive(true);
     }
 
-    // Overload for SetupChoiceVisuals if you have background images to color
-    // void SetupChoiceVisuals(UpgradeChoiceActivator choiceActivator, TextMeshProUGUI textElement, UnityEngine.UI.Image backgroundImage, UpgradeDefinition upgradeDef)
-    // {
-    //     if (choiceActivator == null || textElement == null || upgradeDef == null) return;
-    //     choiceActivator.InitializeChoice(upgradeDef, this);
-    //     textElement.text = upgradeDef.formattedDisplayName;
-    //     if (backgroundImage != null)
-    //     {
-    //         backgroundImage.color = upgradeDef.displayColor;
-    //         backgroundImage.gameObject.SetActive(true);
-    //     }
-    //     choiceActivator.gameObject.SetActive(true);
-    // }
-
     void SetupChoiceVisuals(UpgradeChoiceActivator choiceActivator, TextMeshProUGUI textElement, UpgradeDefinition upgradeDef)
     {
         if (choiceActivator == null || textElement == null || upgradeDef == null)
         {
-            Debug.LogError($"Missing element for setting up choice: Activator null? {choiceActivator == null}, Text null? {textElement == null}, Def null? {upgradeDef == null}", this);
+            Debug.LogError($"SetupChoiceVisuals: Missing element. ActivatorNull?{choiceActivator == null}, TextNull?{textElement == null}, DefNull?{upgradeDef == null}", choiceActivator?.gameObject);
             return;
         }
         choiceActivator.InitializeChoice(upgradeDef, this);
         textElement.text = upgradeDef.formattedDisplayName;
 
-        // If the shootable choice itself has a Renderer for color (e.g., a 3D Cube)
         Renderer choiceRenderer = choiceActivator.GetComponent<Renderer>();
         if (choiceRenderer != null)
         {
-            choiceRenderer.material.color = upgradeDef.displayColor; // Make sure material supports color tinting
+            choiceRenderer.material.color = upgradeDef.displayColor;
         }
-        // OR, if the visual is a UI Image on the same GameObject as the UpgradeChoiceActivator
         UnityEngine.UI.Image choiceImage = choiceActivator.GetComponent<UnityEngine.UI.Image>();
         if (choiceImage != null)
         {
             choiceImage.color = upgradeDef.displayColor;
         }
-        // else if (choiceBackgroundImages are used and assigned for separate visual background coloring)
-        // {
-        //     // Find the corresponding background image for this choiceActivator index if they are separate
-        //     // This requires careful array management if choiceBackgroundImages is used.
-        // }
 
-        textElement.gameObject.SetActive(true); // Ensure text is visible
-        choiceActivator.gameObject.SetActive(true); // Ensure shootable choice is visible
+        textElement.gameObject.SetActive(true);
+        choiceActivator.gameObject.SetActive(true);
     }
 
-    // Called by UpgradeChoiceActivator when it's shot
     public void ProcessUpgradeSelection(UpgradeDefinition selectedUpgrade, GameObject selectedChoiceObject)
     {
-        if (selectedUpgrade == null || picksMade >= picksAllowed) return;
+        if (selectedUpgrade == null || picksMade >= picksAllowed || gameManager == null) return;
 
         Debug.Log($"UIManager processing selection: {selectedUpgrade.formattedDisplayName}");
         gameManager.ApplyUpgrade(selectedUpgrade);
         picksMade++;
 
-        // Find the activator on the selected object and mark it as selected
         UpgradeChoiceActivator activator = selectedChoiceObject.GetComponent<UpgradeChoiceActivator>();
         if (activator != null)
         {
-            activator.SetSelected(true); // Mark as selected to prevent re-selection
-            // Optionally, make it visually obvious it's selected, e.g., change color, disable collider
-            // selectedChoiceObject.GetComponent<Collider>().enabled = false; // Example
+            activator.SetSelected(true);
             Renderer choiceRenderer = selectedChoiceObject.GetComponent<Renderer>();
-            if (choiceRenderer != null) choiceRenderer.material.color = Color.gray; // Example: Gray out
+            if (choiceRenderer != null) choiceRenderer.material.color = Color.gray;
             UnityEngine.UI.Image choiceImage = selectedChoiceObject.GetComponent<UnityEngine.UI.Image>();
             if (choiceImage != null) choiceImage.color = Color.gray;
         }
-
 
         if (picksMade >= picksAllowed)
         {
