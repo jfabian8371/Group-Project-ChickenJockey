@@ -69,8 +69,8 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 620463039215331625}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: ad52d12ad7e12c644a18f176d31a93bb, type: 3}
   m_Controller: {fileID: 9100000, guid: b6018e84ad4694843a3e1825588efd30, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 10
   currentHealth: 10
-  manager: {fileID: 0}
+  healthManager: {fileID: 0}
 --- !u!1 &7524479425154133222
 GameObject:
   m_ObjectHideFlags: 0
@@ -526,7 +526,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e5c5084a2615ec4192fa1cf6906f1a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 684028744212091086}
+  player: {fileID: 6264462321121357209, guid: 542c295face4faa4da9ba5c48b017d2d, type: 3}
   sniperBulletPrefab: {fileID: 4254222841854871205, guid: d7f00dad19e421243be543e10fcaf2c0, type: 3}
   firePoint: {fileID: 1339264641890116456}
   bulletSpeed: 10
