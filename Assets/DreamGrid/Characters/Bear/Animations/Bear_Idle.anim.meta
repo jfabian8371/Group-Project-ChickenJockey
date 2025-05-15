@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0dec25c5872fda44295434622d8624ec
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 296564
+  packageName: Monster Bear (Free)
+  packageVersion: 1.0
+  assetPath: Assets/DreamGrid/Characters/Bear/Animations/Bear_Idle.anim
+  uploadId: 693840
