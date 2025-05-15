@@ -7,6 +7,9 @@ public class Gun : MonoBehaviour
     public float range = 100f;
     public float baseDamage = 10f;
     public float baseFireCooldown = 0.25f;
+    public int CurrentAmmo => currentAmmo;
+    public bool IsReloading => isReloading;
+
 
     [Header("Runtime Stats")]
     [SerializeField]
@@ -30,6 +33,8 @@ public class Gun : MonoBehaviour
     private float nextFireTime = 0f;
     private float _currentDamageMultiplier = 1.0f;
     private float _currentFireRateMultiplier = 1.0f;
+
+
 
     void Awake()
     {

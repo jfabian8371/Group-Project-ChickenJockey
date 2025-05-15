@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -4238765599903081301}
   - component: {fileID: -759763896823814250}
   - component: {fileID: 1977257194978875934}
+  - component: {fileID: 9207622135957897122}
   m_Layer: 0
   m_Name: SniperEnemyPrefab 1
   m_TagString: Untagged
@@ -127,6 +128,21 @@ CapsuleCollider:
   m_Height: 8
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &9207622135957897122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 620463039215331625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0407356175519d746ab56556b7d56812, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 10
+  currentHealth: 10
+  manager: {fileID: 0}
 --- !u!1 &7524479425154133222
 GameObject:
   m_ObjectHideFlags: 0
