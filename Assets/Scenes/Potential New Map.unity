@@ -232,13 +232,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: 100
   damage: 10
-  fireRate: 10
+  fireRate: 5
   fpsCam: {fileID: 107508534}
   audioSource: {fileID: 157231890}
   fireSound: {fileID: 8300000, guid: ba5a25e9632c04cb6a356d3bbc23709d, type: 3}
   reloadSound: {fileID: 8300000, guid: 0b341acefd59347caa11725cd565f870, type: 3}
   impactEffectPrefab: {fileID: 8443315704496310910, guid: 6ef35fa36e3a65043b2d800600204bdd, type: 3}
-  clipSize: 30
+  clipSize: 15
   reloadTime: 2
 --- !u!82 &157231890
 AudioSource:
@@ -3958,6 +3958,10 @@ PrefabInstance:
       value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 2072692179261496146, guid: 542c295face4faa4da9ba5c48b017d2d, type: 3}
+      propertyPath: reloadTime
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2072692179261496146, guid: 542c295face4faa4da9ba5c48b017d2d, type: 3}
       propertyPath: reloadSound
       value: 
       objectReference: {fileID: 8300000, guid: 0b341acefd59347caa11725cd565f870, type: 3}
@@ -3970,9 +3974,13 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3717163615107943299, guid: 542c295face4faa4da9ba5c48b017d2d, type: 3}
+      propertyPath: reloadTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3717163615107943299, guid: 542c295face4faa4da9ba5c48b017d2d, type: 3}
       propertyPath: reloadSound
       value: 
-      objectReference: {fileID: 8300000, guid: 8be8c003f641045309c86050e822c616, type: 3}
+      objectReference: {fileID: 8300000, guid: b0080d94bba86474f9f6f6e7f82d02f7, type: 3}
     - target: {fileID: 3943945096463072505, guid: 542c295face4faa4da9ba5c48b017d2d, type: 3}
       propertyPath: m_Enabled
       value: 1
