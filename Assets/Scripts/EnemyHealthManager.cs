@@ -16,6 +16,9 @@ public class EnemyHealthManager : MonoBehaviour
     {
         EnemyHealth[] enemies = FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None);
 
+        totalEnemyHealth = 0f;
+        currentEnemyHealth = 0f;
+
         foreach (EnemyHealth enemy in enemies)
         {
             totalEnemyHealth += enemy.maxHealth;
@@ -31,20 +34,32 @@ public class EnemyHealthManager : MonoBehaviour
     public void ReportDamage(float amount)
     {
         currentEnemyHealth -= amount;
+        currentEnemyHealth = Mathf.Clamp(currentEnemyHealth, 0f, totalEnemyHealth);
         UpdateHealthBar();
     }
 
-    public void ReportEnemyDeath(float remainingHealth)
+    // Called when an enemy dies
+    public void ReportEnemyDeath()
     {
-        currentEnemyHealth -= remainingHealth;
         enemiesRemaining--;
+
+        // Recalculate current health from all alive enemies
+        EnemyHealth[] enemies = FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None);
+
+        float totalCurrentHealth = 0f;
+        foreach (EnemyHealth enemy in enemies)
+        {
+            totalCurrentHealth += enemy.currentHealth;
+        }
+        currentEnemyHealth = totalCurrentHealth;
 
         UpdateHealthBar();
 
         if (enemiesRemaining <= 0)
         {
-            if (healthBar != null)
-                healthBar.gameObject.SetActive(false);
+            // Hide the entire health bar container (parent of the red bar)
+            if (healthBar != null && healthBar.transform.parent != null)
+                healthBar.transform.parent.gameObject.SetActive(false);
 
             if (healthText != null)
                 healthText.gameObject.SetActive(false);
@@ -58,14 +73,12 @@ public class EnemyHealthManager : MonoBehaviour
         float ratio = totalEnemyHealth > 0 ? currentEnemyHealth / totalEnemyHealth : 0f;
         float newWidth = ratio * barWidth;
 
-        // Hide the ENTIRE bar object (parent) if health is 0
         bool shouldShowBar = currentEnemyHealth > 0;
 
         if (healthBar != null)
         {
             healthBar.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, newWidth);
 
-            // Instead of hiding just the red bar, hide the full parent container
             if (healthBar.transform.parent != null)
             {
                 healthBar.transform.parent.gameObject.SetActive(shouldShowBar);
@@ -91,7 +104,8 @@ public class EnemyHealthManager : MonoBehaviour
             enemy.healthManager = this;
         }
 
-        // Make sure the health bar and text are visible again
+        enemiesRemaining = newEnemies.Length;
+
         if (healthBar != null)
             healthBar.gameObject.SetActive(true);
         if (healthText != null)
@@ -99,7 +113,4 @@ public class EnemyHealthManager : MonoBehaviour
 
         UpdateHealthBar();
     }
-
-
-
 }

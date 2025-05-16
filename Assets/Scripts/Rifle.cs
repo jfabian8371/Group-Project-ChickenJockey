@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Rifle : MonoBehaviour
+public class Rifle : MonoBehaviour, IWeapon
 {
     [Header("Base Stats")]
     public float range = 100f;
@@ -35,8 +35,9 @@ public class Rifle : MonoBehaviour
     // private float _currentFireRateMultiplier = 1.0f;
 
     // Public properties for external access if needed
-    public int CurrentAmmoPub => currentAmmo;
-    public bool IsReloadingPub => isReloading;
+    public bool IsReloading => isReloading;
+    public int CurrentAmmo => currentAmmo;
+    public int ClipSize => clipSize;
 
     void Awake()
     {
