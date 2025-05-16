@@ -1,4 +1,5 @@
 using UnityEngine;
+
 public class SniperEnemy : MonoBehaviour
 {
     public Transform player;
@@ -12,12 +13,26 @@ public class SniperEnemy : MonoBehaviour
     public float moveSpeed = 5f;
 
     private float shootTimer;
-    private Animator animator;         // <-- NEW
-
+    private Animator animator;
 
     void Start()
     {
-        animator = GetComponent<Animator>(); // Get the Animator on this GameObject
+        animator = GetComponent<Animator>();
+
+        // Auto-find player if not manually assigned
+        if (player == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+            {
+                player = playerObj.transform;
+                Debug.Log("Sniper found player by tag.");
+            }
+            else
+            {
+                Debug.LogError("SniperEnemy: Player target not set and not found by tag 'Player'!");
+            }
+        }
     }
 
     void Update()
@@ -60,7 +75,6 @@ public class SniperEnemy : MonoBehaviour
         // Shooting logic
         if (distance <= attackDistance && distance >= retreatDistance)
         {
-            
             shootTimer += Time.deltaTime;
             if (shootTimer >= shootInterval)
             {
@@ -75,32 +89,31 @@ public class SniperEnemy : MonoBehaviour
     }
 
     void Shoot()
-{
-    if (sniperBulletPrefab && firePoint)
     {
-        GameObject bullet = Instantiate(sniperBulletPrefab, firePoint.position, firePoint.rotation);
-
-        // Set target on the bullet
-        SniperBullet bulletScript = bullet.GetComponent<SniperBullet>();
-        if (bulletScript != null && player != null)
+        if (sniperBulletPrefab && firePoint)
         {
-            // Try to find a child transform like "Armature" or "Head"
-            Transform aimTarget = player.Find("Armature"); // Change this to match your actual rig
+            GameObject bullet = Instantiate(sniperBulletPrefab, firePoint.position, firePoint.rotation);
 
-            // Fallback if not found
-            if (aimTarget == null)
-                aimTarget = player;
+            // Set target on the bullet
+            SniperBullet bulletScript = bullet.GetComponent<SniperBullet>();
+            if (bulletScript != null && player != null)
+            {
+                // Try to find a child transform like "Armature" or "Head"
+                Transform aimTarget = player.Find("Armature"); // Modify as needed
 
-            bulletScript.target = aimTarget;
-        }
+                // Fallback if not found
+                if (aimTarget == null)
+                    aimTarget = player;
 
-        // Optional: give initial velocity (for appearance or physics effects)
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        if (rb)
-        {
-            rb.linearVelocity = firePoint.forward * bulletSpeed;
+                bulletScript.target = aimTarget;
+            }
+
+            // Optional: give initial velocity (for appearance or physics effects)
+            Rigidbody rb = bullet.GetComponent<Rigidbody>();
+            if (rb)
+            {
+                rb.linearVelocity = firePoint.forward * bulletSpeed;
+            }
         }
     }
-}
-
 }
