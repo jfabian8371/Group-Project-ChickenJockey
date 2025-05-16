@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections; // Required for IEnumerator (Reload)
 
-public class Gun : MonoBehaviour
+public class Gun : MonoBehaviour, IWeapon
 {
     [Header("Base Stats")]
     public float range = 100f;
@@ -35,8 +35,9 @@ public class Gun : MonoBehaviour
     // private float _currentFireRateMultiplier = 1.0f;
 
     // Public properties for external access if needed
-    public int CurrentAmmoPub => currentAmmo; // Renamed for clarity if original "CurrentAmmo" was problematic
-    public bool IsReloadingPub => isReloading; // Renamed
+    public bool IsReloading => isReloading;
+    public int CurrentAmmo => currentAmmo;
+    public int ClipSize => clipSize;
 
     void Awake()
     {
