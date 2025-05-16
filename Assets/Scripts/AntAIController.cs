@@ -9,6 +9,13 @@ public class AntAIController : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        if (player == null)
+        {
+            // Try to find player by tag if not assigned
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null) player = playerObj.transform;
+            else Debug.LogError("Ant AI: Player target not set and not found by tag 'Player'!");
+        }
     }
 
     void Update()

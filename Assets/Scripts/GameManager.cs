@@ -30,7 +30,6 @@ public class GameManager : MonoBehaviour
         if (!wallController) Debug.LogError("WallController not assigned to GameManager!", this);
         if (!weaponSwitcher) Debug.LogError("WeaponSwitcher not assigned to GameManager!", this);
         if (!enemySpawner) Debug.LogError("EnemySpawner not assigned to GameManager!", this);
-        Debug.LogError("hello");
 
         if (wallController && playerHealth)
         {
