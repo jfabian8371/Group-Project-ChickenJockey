@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &8561903398933001151
+--- !u!1001 &2761369491493816862
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.028138697
+      value: -33.83
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 4.49
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.08856979
+      value: -37.31
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
       propertyPath: m_Name
-      value: FINAL_monster_bear_modified
+      value: FINAL_monster_bear_modified 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
       propertyPath: m_Controller
@@ -62,48 +62,52 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4201465377495593728}
+      addedObject: {fileID: 365432020227903484}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -4426047926015722816}
+      addedObject: {fileID: 5599078191551204285}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5514400965158569145}
+      addedObject: {fileID: 2503239183215309378}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3542244904800757668}
+      addedObject: {fileID: 7916670834647814667}
   m_SourcePrefab: {fileID: 100100000, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
---- !u!1 &8795692897192201966 stripped
+--- !u!1 &3067852112384374607 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 65c47ba8ff62ca0499873b889f10183e, type: 3}
-  m_PrefabInstance: {fileID: 8561903398933001151}
+  m_PrefabInstance: {fileID: 2761369491493816862}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4201465377495593728
+--- !u!114 &365432020227903484
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8795692897192201966}
+  m_GameObject: {fileID: 3067852112384374607}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a264edf6f8866e47b72cfa57c1436fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerTarget: {fileID: 0}
-  walkSpeed: 1.5
+  walkSpeed: 1
   runSpeed: 4
   sightRange: 15
   attackRange: 2.5
-  attackCooldown: 3
-  attackRecoveryDuration: 2
---- !u!114 &-4426047926015722816
+  attackCooldown: 6
+  attackRecoveryDuration: 5
+  attackDamage: 30
+  attackHitBoxRange: 3
+  attackHitAngle: 60
+  attackDamageDelay: 0.2
+--- !u!114 &5599078191551204285
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8795692897192201966}
+  m_GameObject: {fileID: 3067852112384374607}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0407356175519d746ab56556b7d56812, type: 3}
@@ -112,13 +116,13 @@ MonoBehaviour:
   maxHealth: 500
   currentHealth: 500
   healthManager: {fileID: 0}
---- !u!195 &5514400965158569145
+--- !u!195 &2503239183215309378
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8795692897192201966}
+  m_GameObject: {fileID: 3067852112384374607}
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
@@ -134,13 +138,13 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!136 &3542244904800757668
+--- !u!136 &7916670834647814667
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8795692897192201966}
+  m_GameObject: {fileID: 3067852112384374607}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
