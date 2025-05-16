@@ -86,7 +86,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e5c5084a2615ec4192fa1cf6906f1a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 549173385074072458, guid: 429791a28391deb4eb40d69a6a8c4e2f, type: 3}
+  player: {fileID: 0}
   sniperBulletPrefab: {fileID: 4254222841854871205, guid: d7f00dad19e421243be543e10fcaf2c0, type: 3}
   firePoint: {fileID: 5091368507414383370}
   bulletSpeed: 10
