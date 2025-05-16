@@ -55,7 +55,7 @@ public class EnemyHealthManager : MonoBehaviour
     {
         currentEnemyHealth = Mathf.Clamp(currentEnemyHealth, 0, totalEnemyHealth);
 
-        float ratio = totalEnemyHealth > 0 ? currentEnemyHealth / totalEnemyHealth : 0f;
+        float ratio = totalEnemyHealth > 0 ? (currentEnemyHealth / totalEnemyHealth) : 0f;
         float newWidth = ratio * barWidth;
 
         // Hide the ENTIRE bar object (parent) if health is 0

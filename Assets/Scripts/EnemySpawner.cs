@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject enemyPrefab;
+    public GameObject[] enemyPrefabs;
     public int numberOfEnemies = 5;
     public Vector2 spawnArea = new Vector2(10f, 10f);
     public EnemyHealthManager healthManager;
@@ -27,7 +27,12 @@ public class EnemySpawner : MonoBehaviour
                 Random.Range(-spawnArea.y, spawnArea.y)
             );
 
-            GameObject enemyObj = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+            // pick a random enemy to spawn
+            int randomIndex = Random.Range(0, enemyPrefabs.Length-1);
+            Debug.Log("Spawning an enemy prefab of index " + randomIndex);
+            
+            // spawn
+            GameObject enemyObj = Instantiate(enemyPrefabs[randomIndex], spawnPos, Quaternion.identity);
             newEnemies[i] = enemyObj.GetComponent<EnemyHealth>();
         }
 

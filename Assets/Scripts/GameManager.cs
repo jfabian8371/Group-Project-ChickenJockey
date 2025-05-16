@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public FirstPersonController playerController;
     public WallController wallController;
     public WeaponSwitcher weaponSwitcher;
+    public EnemySpawner enemySpawner;
 
     [Header("Global Player Modifiers")]
     [Tooltip("Current global damage multiplier. 1.0 = 100% base damage.")]
@@ -28,6 +29,8 @@ public class GameManager : MonoBehaviour
         if (!playerController) Debug.LogError("FirstPersonController not assigned to GameManager!", this);
         if (!wallController) Debug.LogError("WallController not assigned to GameManager!", this);
         if (!weaponSwitcher) Debug.LogError("WeaponSwitcher not assigned to GameManager!", this);
+        if (!enemySpawner) Debug.LogError("EnemySpawner not assigned to GameManager!", this);
+        Debug.LogError("hello");
 
         if (wallController && playerHealth)
         {
@@ -88,11 +91,20 @@ public class GameManager : MonoBehaviour
         isUpgradeWallActive = false;
         currentRound++;
         Debug.Log($"Starting Round {currentRound}");
+        
+        enemySpawner.SpawnWave();
+        
+        // increasing difficulty
+        enemySpawner.numberOfEnemies += 5;
+
+        // for debugging
+        /*
         if (currentRound > 0)
         {
             Debug.Log($"Simulating round play for 5 seconds... (Round {currentRound})");
             Invoke(nameof(EndRound), 5f);
         }
+        */
     }
 
     public void ApplyUpgrade(UpgradeDefinition upgrade)
