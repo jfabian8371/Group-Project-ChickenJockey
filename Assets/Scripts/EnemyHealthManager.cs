@@ -3,6 +3,9 @@ using TMPro;
 
 public class EnemyHealthManager : MonoBehaviour
 {
+    // giving this class a reference to GameManager just to call GameManager.EndRound()
+    public GameManager gameManager; 
+
     public RectTransform healthBar;        // The red fill bar
     public float barWidth = 200f;          // Total width of the health bar
     public float barHeight = 20f;          // Height of the bar
@@ -89,6 +92,12 @@ public class EnemyHealthManager : MonoBehaviour
         {
             healthText.text = $"{Mathf.RoundToInt(currentEnemyHealth)}/{Mathf.RoundToInt(totalEnemyHealth)}";
             healthText.gameObject.SetActive(shouldShowBar);
+        }
+        
+        if (currentEnemyHealth <= 0)
+        {
+            Debug.LogError("Ending round");
+            gameManager.EndRound();
         }
     }
 

@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject[] enemyPrefabs;
-    public int numberOfEnemies = 5;
+    public int numberOfEnemies = 3;
     public Vector2 spawnArea = new Vector2(10f, 10f);
     public EnemyHealthManager healthManager;
 

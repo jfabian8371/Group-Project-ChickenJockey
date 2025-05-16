@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FINAL_Ant_Blue
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: c76e1dd902d7cfe488a45d500f98d871, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 7771993403118544eb059b92764b12f1, type: 2}
     - target: {fileID: 7807634055741096743, guid: c76e1dd902d7cfe488a45d500f98d871, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 

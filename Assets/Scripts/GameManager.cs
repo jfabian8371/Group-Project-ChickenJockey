@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public WallController wallController;
     public WeaponSwitcher weaponSwitcher;
     public EnemySpawner enemySpawner;
+    public GameObject roundStartText;
+    public GameObject roundEndText;
 
     [Header("Global Player Modifiers")]
     [Tooltip("Current global damage multiplier. 1.0 = 100% base damage.")]
@@ -39,6 +41,8 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("Cannot initialize WallController due to missing PlayerHealth or WallController reference.", this);
         }
+
+        roundStartText.SetActive(false);
     }
 
     void Start()
@@ -67,6 +71,10 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("EndRound called, but upgrade wall is already active or being processed.");
             return;
         }
+
+        roundEndText.SetActive(true);
+        Invoke(nameof(DisableRoundEndText), 3f);
+
         Debug.Log($"Round {currentRound} ended.");
         isUpgradeWallActive = true;
         ShowUpgradeWall();
@@ -85,11 +93,24 @@ public class GameManager : MonoBehaviour
         wallController.ShowWallAndPrepareUpgrades(picks);
     }
 
+    private void DisableRoundStartText()
+    {
+        roundStartText.SetActive(false);
+    }
+
+    private void DisableRoundEndText()
+    {
+        roundEndText.SetActive(false);
+    }
+
     public void StartNextRound()
     {
         isUpgradeWallActive = false;
         currentRound++;
         Debug.Log($"Starting Round {currentRound}");
+
+        roundStartText.SetActive(true);
+        Invoke(nameof(DisableRoundStartText), 3f);
         
         enemySpawner.SpawnWave();
         
