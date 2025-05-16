@@ -1815,6 +1815,10 @@ PrefabInstance:
       propertyPath: numberOfEnemies
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2495252948028516456, guid: 6e09aaf119ac692ac8b0432ce536a533, type: 3}
+      propertyPath: 'enemyPrefabs.Array.data[4]'
+      value: 
+      objectReference: {fileID: 1006988486051157077, guid: 00b286560eaefde47802ef4271efe745, type: 3}
     - target: {fileID: 4946396814195177063, guid: 6e09aaf119ac692ac8b0432ce536a533, type: 3}
       propertyPath: m_Name
       value: Enemy Spawner
@@ -5080,7 +5084,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 299844722011911524, guid: 542c295face4faa4da9ba5c48b017d2d, type: 3}
       propertyPath: baseDamage
-      value: 50
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 299844722011911524, guid: 542c295face4faa4da9ba5c48b017d2d, type: 3}
       propertyPath: reloadSound
@@ -5571,7 +5575,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6208920421240618884, guid: 44590b79c9e9f174482cfd33226d3499, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6631117285805948099, guid: 44590b79c9e9f174482cfd33226d3499, type: 3}
       propertyPath: m_LocalPosition.x

@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
 
         Debug.Log($"Round {currentRound} ended.");
         isUpgradeWallActive = true;
-        //ShowUpgradeWall();
+        ShowUpgradeWall();
     }
 
     void ShowUpgradeWall()
