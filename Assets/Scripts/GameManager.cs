@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
         }
 
         roundStartText.SetActive(false);
+        roundEndText.SetActive(false);
     }
 
     void Start()
@@ -59,7 +60,7 @@ public class GameManager : MonoBehaviour
             triggerUpgradeWallManually = false;
             if (!isUpgradeWallActive)
             {
-                EndRound();
+                //EndRound();
             }
         }
     }

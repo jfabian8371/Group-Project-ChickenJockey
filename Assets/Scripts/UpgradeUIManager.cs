@@ -52,6 +52,7 @@ public class UpgradeUIManager : MonoBehaviour
 
     void InitializeUpgradeDefinitions()
     {
+        Debug.LogError("BBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         allPossibleRandomUpgrades.Clear(); // Clear before repopulating if called multiple times (though usually just once in Awake)
 
         // Heal to Full (always specific)
@@ -117,6 +118,7 @@ public class UpgradeUIManager : MonoBehaviour
         }
 
         // Slot 0: Always Heal to Full
+        if (healToFullUpgrade == null) Debug.LogError("AHHHHHHHHHHHHHHHHHHHHHHHHHHH");
         healToFullUpgrade.DetermineAndSetInstanceDetails(useRandomRarity: false); // No random rarity for heal
         SetupChoiceVisuals(shootableChoices[0], choiceDisplayTexts[0], healToFullUpgrade);
 

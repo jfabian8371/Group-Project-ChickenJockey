@@ -28,7 +28,7 @@ public class EnemySpawner : MonoBehaviour
             );
 
             // pick a random enemy to spawn
-            int randomIndex = Random.Range(0, enemyPrefabs.Length-1);
+            int randomIndex = Random.Range(0, enemyPrefabs.Length);
             Debug.Log("Spawning an enemy prefab of index " + randomIndex);
             
             // spawn

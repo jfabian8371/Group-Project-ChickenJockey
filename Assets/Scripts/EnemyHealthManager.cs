@@ -71,6 +71,8 @@ public class EnemyHealthManager : MonoBehaviour
 
     private void UpdateHealthBar()
     {
+        Debug.Log(totalEnemyHealth);
+        Debug.Log(currentEnemyHealth);
         currentEnemyHealth = Mathf.Clamp(currentEnemyHealth, 0, totalEnemyHealth);
 
         float ratio = totalEnemyHealth > 0 ? (currentEnemyHealth / totalEnemyHealth) : 0f;
@@ -94,7 +96,7 @@ public class EnemyHealthManager : MonoBehaviour
             healthText.gameObject.SetActive(shouldShowBar);
         }
         
-        if (currentEnemyHealth <= 0)
+        if (totalEnemyHealth > 0 && currentEnemyHealth <= 0)
         {
             Debug.LogError("Ending round");
             gameManager.EndRound();
