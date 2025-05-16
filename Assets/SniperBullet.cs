@@ -26,11 +26,23 @@ public class SniperBullet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        // Optional: prevent hitting non-targets
-        if (other.transform == target)
+        // If the bullet hits the player
+        if (other.CompareTag("Player"))
         {
-            Debug.Log("Sniper bullet hit target: " + other.name);
+            // Try to get the PlayerDamage component
+            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(10f); // Or whatever damage value you want
+            }
+
+            Destroy(gameObject);
+        }
+        else if (other.transform == target)
+        {
+            // If you want to keep original target logic
             Destroy(gameObject);
         }
     }
+
 }

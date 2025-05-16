@@ -25,6 +25,8 @@ public class PlayerHealth : MonoBehaviour
     public float MaxHealth => _maxHealth;
     public float DamageReductionPercentage => _damageReductionPercentage;
 
+    private GameOver gameOver;
+
     void Awake()
     {
         // If you have a FirstPersonController script on the same GameObject:
@@ -34,6 +36,7 @@ public class PlayerHealth : MonoBehaviour
 
     void Start()
     {
+        gameOver = FindObjectOfType<GameOver>();
         // Invoke initial health changed event for UI updates
         OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
     }
@@ -130,6 +133,10 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("Player has died!");
         OnPlayerDied?.Invoke();
 
+        if (gameOver != null)
+        {
+            gameOver.ShowDeathScreen();
+        }
         // --- Add death logic here ---
         // For example:
         // - Disable player input/controller (if (playerController) playerController.enabled = false;)
