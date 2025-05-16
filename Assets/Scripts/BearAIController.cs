@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI; // For NavMeshAgent
+using System.Collections; // Required for Invoke if we were using Coroutines, but Invoke is built-in
 
 public class BearAIController : MonoBehaviour
 {
@@ -10,6 +11,12 @@ public class BearAIController : MonoBehaviour
     public float attackRange = 2.5f;       // Range to initiate an attack
     public float attackCooldown = 3.0f;    // Time between attacks
     public float attackRecoveryDuration = 2.0f; // How long it stays in "Bear Idle O" conceptually
+
+    [Header("Attack Settings")]
+    public float attackDamage = 20f;
+    public float attackHitBoxRange = 3.0f;
+    public float attackHitAngle = 60f;
+    public float attackDamageDelay = 0.2f; // <<< NEW: Time in seconds after attack starts to check for damage
 
     private NavMeshAgent agent;
     private Animator animator;
@@ -34,36 +41,58 @@ public class BearAIController : MonoBehaviour
 
         if (playerTarget == null)
         {
-            // Try to find player by tag if not assigned
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-            if (playerObj != null) playerTarget = playerObj.transform;
-            else Debug.LogError("Bear AI: Player target not set and not found by tag 'Player'!");
+            if (playerObj != null)
+            {
+                playerTarget = playerObj.transform;
+            }
+            else
+            {
+                Debug.LogError("Bear AI: Player target not set and not found by tag 'Player'!", this);
+            }
         }
 
-        currentState = AIState.Walking; // Start by walking
-        agent.speed = walkSpeed;
+        currentState = AIState.Walking;
+        if (agent != null && agent.isOnNavMesh)
+        {
+            agent.speed = walkSpeed;
+        }
+        else if (agent == null)
+        {
+            Debug.LogError("Bear AI: NavMeshAgent component not found!", this);
+        }
+        else if (!agent.isOnNavMesh)
+        {
+            Debug.LogError("Bear AI: NavMeshAgent is not on a NavMesh!", this);
+        }
     }
 
     void Update()
     {
-        if (playerTarget == null || isAttackingOrRecovering) // If no target or in attack/recovery animation sequence
+        if (playerTarget == null || agent == null || !agent.isOnNavMesh)
         {
-            if (isAttackingOrRecovering)
+            if (agent != null && agent.isOnNavMesh)
             {
-                HandleRecovery();
+                if (!agent.isStopped) agent.isStopped = true;
+                if (agent.hasPath) agent.ResetPath();
+                agent.velocity = Vector3.zero;
             }
-            else // No target
-            {
-                agent.isStopped = true;
-                animator.SetFloat("Speed", 0);
-            }
+            if (animator != null) animator.SetFloat("Speed", 0);
+            return;
+        }
+
+        if (isAttackingOrRecovering)
+        {
+            HandleRecovery();
             return;
         }
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerTarget.position);
 
-        // Always update the animator's speed parameter based on agent's current velocity
-        animator.SetFloat("Speed", agent.velocity.magnitude, 0.1f, Time.deltaTime);
+        if (animator != null)
+        {
+            animator.SetFloat("Speed", agent.velocity.magnitude, 0.1f, Time.deltaTime);
+        }
 
         switch (currentState)
         {
@@ -73,23 +102,21 @@ public class BearAIController : MonoBehaviour
             case AIState.Chasing:
                 HandleChasingState(distanceToPlayer);
                 break;
-                // Attacking and Recovering are handled via isAttackingOrRecovering flag and animation events/transitions
         }
     }
 
     void HandleWalkingState(float distanceToPlayer)
     {
         agent.speed = walkSpeed;
-        agent.SetDestination(playerTarget.position); // Slowly walk towards current player position
+        agent.SetDestination(playerTarget.position);
         agent.isStopped = false;
 
         if (distanceToPlayer <= sightRange)
         {
             currentState = AIState.Chasing;
-            lastKnownPlayerPosition = playerTarget.position; // Store where player was spotted
+            lastKnownPlayerPosition = playerTarget.position;
             Debug.Log("Bear: Spotted player, switching to CHASE.");
         }
-        // Check if close enough to attack even from walk state
         if (distanceToPlayer <= attackRange && Time.time >= lastAttackTime + attackCooldown)
         {
             InitiateAttack();
@@ -99,24 +126,23 @@ public class BearAIController : MonoBehaviour
     void HandleChasingState(float distanceToPlayer)
     {
         agent.speed = runSpeed;
-        agent.SetDestination(lastKnownPlayerPosition); // Run towards where player WAS spotted
+        agent.SetDestination(lastKnownPlayerPosition);
         agent.isStopped = false;
 
-        // If reached the last known position OR player is within attack range
         if ((Vector3.Distance(transform.position, lastKnownPlayerPosition) <= agent.stoppingDistance + 0.5f || distanceToPlayer <= attackRange)
             && Time.time >= lastAttackTime + attackCooldown)
         {
-            if (distanceToPlayer <= attackRange) // Check if player is ACTUALLY in range
+            if (distanceToPlayer <= attackRange)
             {
                 InitiateAttack();
             }
-            else // Reached spot, player not there, go back to walking/searching
+            else
             {
                 Debug.Log("Bear: Reached last known spot, player not in attack range. Back to WALKING.");
                 currentState = AIState.Walking;
             }
         }
-        else if (distanceToPlayer > sightRange * 1.5f) // Player got too far away
+        else if (distanceToPlayer > sightRange * 1.5f)
         {
             Debug.Log("Bear: Player too far, back to WALKING.");
             currentState = AIState.Walking;
@@ -125,70 +151,152 @@ public class BearAIController : MonoBehaviour
 
     void InitiateAttack()
     {
-        currentState = AIState.Attacking; // Conceptually
+        currentState = AIState.Attacking;
         isAttackingOrRecovering = true;
 
-        agent.isStopped = true; // Stop moving to attack
-        animator.SetFloat("Speed", 0); // Ensure speed is zero for attack anim
-        transform.LookAt(playerTarget.position); // Face the player
-        animator.SetTrigger("Attack");
-        lastAttackTime = Time.time;
-        Debug.Log("Bear: ATTACKING!");
+        if (agent.isOnNavMesh)
+        {
+            if (!agent.isStopped) agent.isStopped = true;
+            if (agent.hasPath) agent.ResetPath();
+            agent.velocity = Vector3.zero;
+        }
 
-        // The Animator will transition Bear_Strike2 -> Bear Idle O automatically.
-        // We'll use HandleRecovery to manage the Bear Idle O phase.
-        recoveryTimer = attackRecoveryDuration; // Start recovery countdown
+        if (animator != null)
+        {
+            animator.SetFloat("Speed", 0);
+            if (playerTarget != null) transform.LookAt(playerTarget.position); // Ensure facing player
+            animator.SetTrigger("Attack");
+        }
+        lastAttackTime = Time.time;
+        Debug.Log("Bear: ATTACKING! Will attempt damage check in " + attackDamageDelay + " seconds.");
+
+        // --- NEW: Call AttemptDamageAfterDelay using Invoke ---
+        Invoke(nameof(AttemptDamageAfterDelay), attackDamageDelay); // Calls the function by its name after a delay
+
+        recoveryTimer = attackRecoveryDuration;
     }
 
     void HandleRecovery()
     {
-        // This method is called while isAttackingOrRecovering is true.
-        // The actual animation is playing (Strike2 then Idle O).
-        // We use a timer to decide when to exit the "conceptual" recovery state.
-
-        // Ensure speed is 0 while in Bear Idle O (recovery anim)
-        // The animator state machine should handle this visually if `Bear Idle O` is a static anim,
-        // but it's good to ensure NavMeshAgent isn't trying to move.
-        if (agent.isOnNavMesh) agent.isStopped = true;
-        animator.SetFloat("Speed", 0);
-
+        if (agent.isOnNavMesh)
+        {
+            if (!agent.isStopped) agent.isStopped = true;
+            if (agent.hasPath) agent.ResetPath();
+            agent.velocity = Vector3.zero;
+        }
+        if (animator != null) animator.SetFloat("Speed", 0);
 
         recoveryTimer -= Time.deltaTime;
         if (recoveryTimer <= 0)
         {
             isAttackingOrRecovering = false;
-            currentState = AIState.Walking; // Reset to walking state
-            agent.isStopped = false; // Allow movement again
+            currentState = AIState.Walking;
+            if (agent.isOnNavMesh) agent.isStopped = false;
             Debug.Log("Bear: Recovery finished, back to WALKING.");
         }
     }
 
-    // Optional: Animation Event
-    // You can add an Animation Event at the end of "Bear_Strike2" animation
-    // to call a method if you need more precise timing for when the actual strike happens
-    // or when recovery should strictly begin.
-    public void OnAttackAnimationHitMoment() // Call this from animation event
+    // --- RENAMED & MODIFIED: This method is now called by Invoke, NOT an Animation Event ---
+    void AttemptDamageAfterDelay() // Renamed from OnAttackAnimationHitMoment
     {
-        Debug.Log("Bear: Attack Hit Frame!");
-        // Deal damage here if your attack animation has a specific hit frame
-    }
-    public void OnAttackAnimationEnd() // Call from Anim Event at end of Bear_Strike2
-    {
-        // The transition to Bear Idle O is automatic.
-        // The recoveryTimer logic already handles the duration of the recovery phase.
-        // This function might be useful if you need to trigger something specific *exactly* when Strike2 animation clip finishes.
-        Debug.Log("Bear: Strike animation clip finished, entering recovery animation (Bear Idle O).");
+        // Check if still in an attacking state or if player became null during the delay
+        if (!isAttackingOrRecovering || playerTarget == null)
+        {
+            Debug.LogWarning("Bear: AttemptDamageAfterDelay called, but no longer attacking or playerTarget is null. No damage dealt.");
+            return;
+        }
+
+        //Debug.LogWarning("!!! BEAR: AttemptDamageAfterDelay FIRED (after " + attackDamageDelay + "s) !!!");
+
+        // --- This is the "forced damage" version from your last script version ---
+        // --- We will keep it for now to ensure the core damage dealing works ---
+        // --- You can uncomment the range/angle checks later if this part works ---
+
+        PlayerHealthManager playerHealthManager = playerTarget.GetComponent<PlayerHealthManager>();
+
+        if (playerHealthManager == null)
+        {
+            Debug.LogError($"!!! BEAR: PlayerHealthManager NOT FOUND on {playerTarget.name} in AttemptDamageAfterDelay !!!");
+            GameObject currentTarget = playerTarget.gameObject;
+            PlayerHealth directPlayerHealth = currentTarget.GetComponent<PlayerHealth>();
+            if (directPlayerHealth == null)
+            {
+                Debug.LogError($"!!! BEAR: Also, PlayerHealth script NOT FOUND on {playerTarget.name} !!!");
+            }
+            else
+            {
+                Debug.LogWarning($"BEAR: Found PlayerHealth script on {playerTarget.name}, but not PlayerHealthManager.");
+            }
+            return;
+        }
+
+        Debug.Log($"BEAR: Found PlayerHealthManager on {playerTarget.name}. Attempting to deal {attackDamage} damage via timed delay.");
+        playerHealthManager.TakeDamage(attackDamage);
+        Debug.Log($"BEAR: Called TakeDamage on PlayerHealthManager (timed delay). Check player health and console.");
+
+
+        // --- ORIGINAL RANGE/ANGLE CHECKS (keep commented for now, uncomment when ready) ---
+        /*
+        float distanceToPlayer = Vector3.Distance(transform.position, playerTarget.position);
+        Debug.Log($"--- (Timed Delay) Hit Check --- Distance: {distanceToPlayer:F2} (Range: {attackHitBoxRange:F2})");
+
+        if (distanceToPlayer <= attackHitBoxRange)
+        {
+            // It's a good idea to re-check LookAt if the player or bear might have moved during the delay
+            if (playerTarget != null) transform.LookAt(playerTarget.position);
+
+            Vector3 directionToPlayer = (playerTarget.position - transform.position).normalized;
+            float angle = Vector3.Angle(transform.forward, directionToPlayer);
+            Debug.Log($"--- (Timed Delay) Hit Check --- Angle: {angle:F2} (Max Angle: {attackHitAngle:F2})");
+
+            if (angle <= attackHitAngle)
+            {
+                // PlayerHealthManager playerHealthManager = playerTarget.GetComponent<PlayerHealthManager>(); // Already got this
+                if (playerHealthManager != null)
+                {
+                    Debug.Log($"Bear: SUCCESS (Timed Delay)! Dealing {attackDamage} damage to {playerTarget.name}");
+                    playerHealthManager.TakeDamage(attackDamage);
+                }
+            }
+            else
+            {
+                Debug.Log($"Bear: Attack missed (Timed Delay) {playerTarget.name} - Out of angle.");
+            }
+        }
+        else
+        {
+            Debug.Log($"Bear: Attack missed (Timed Delay) {playerTarget.name} - Out of range.");
+        }
+        */
     }
 
+    // OnAttackAnimationEnd can remain. It's not directly related to damage dealing in this approach.
+    public void OnAttackAnimationEnd()
+    {
+        Debug.Log("Bear: Strike animation clip finished (actual anim clip). Recovery period continues via timer.");
+    }
 
     void OnDrawGizmosSelected()
     {
-        // For visualizing ranges in the editor
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, sightRange);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
-        if (agent != null && agent.hasPath)
+
+        if (playerTarget != null)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(transform.position, attackHitBoxRange);
+            Vector3 forward = transform.forward;
+            Quaternion leftRayRotation = Quaternion.AngleAxis(-attackHitAngle, Vector3.up);
+            Quaternion rightRayRotation = Quaternion.AngleAxis(attackHitAngle, Vector3.up);
+            Vector3 leftRayDirection = leftRayRotation * forward;
+            Vector3 rightRayDirection = rightRayRotation * forward;
+            Gizmos.DrawRay(transform.position, leftRayDirection * attackHitBoxRange);
+            Gizmos.DrawRay(transform.position, rightRayDirection * attackHitBoxRange);
+        }
+
+        if (agent != null && agent.isOnNavMesh && agent.hasPath)
         {
             Gizmos.color = Color.cyan;
             Gizmos.DrawLine(transform.position, agent.destination);
