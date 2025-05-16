@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class OurPlayerCamera : MonoBehaviour
 {
-    public float mouseSensitivity = 100f;
+    public float mouseSensitivity = 300f;
     public Transform playerBody; // Typically the root or hips of the player
     public Vector3 offset = new Vector3(0f, 1.7f, 0f); // Camera offset from player (adjustable in Inspector)
     public bool rotatePlayerWithCamera = false; // Toggle to rotate player with camera or not
