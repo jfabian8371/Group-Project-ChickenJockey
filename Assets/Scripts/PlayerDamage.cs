@@ -4,6 +4,10 @@ public class PlayerDamage : MonoBehaviour
 {
     private PlayerHealth playerHealth;
 
+    [Header("Damage Values")]
+    public int bulletDamage = 10;
+    public int contactDamage = 15;
+
     private void Awake()
     {
         playerHealth = GetComponent<PlayerHealth>();
@@ -15,17 +19,19 @@ public class PlayerDamage : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Handle bullet damage
         if (other.CompareTag("EnemyBullet"))
         {
-            PlayerHealth playerHealth = GetComponent<PlayerHealth>();
-            if (playerHealth != null)
-            {
-                playerHealth.TakeDamage(10); // or whatever damage amount
-                Debug.LogError("Player hit!");
-            }
+            playerHealth?.TakeDamage(bulletDamage);
+            Debug.Log("Player hit by bullet!");
+            Destroy(other.gameObject);
+        }
 
-            Destroy(other.gameObject); // destroy the bullet
+        // Handle enemy body collision damage
+        if (other.CompareTag("Enemy"))
+        {
+            playerHealth?.TakeDamage(contactDamage);
+            Debug.Log("Player collided with enemy!");
         }
     }
-
 }
