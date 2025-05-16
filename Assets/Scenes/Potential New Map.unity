@@ -1787,7 +1787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95cb2c27bb7945745968650ea759bffa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 620463039215331625, guid: aec0594cf60bc4e4c9a1760b3248e7a7, type: 3}
+  enemyPrefab: {fileID: 3764702728781559278, guid: 0f1205e5f2b34de759a0b77113714ed0, type: 3}
   numberOfEnemies: 5
   spawnArea: {x: 10, y: 10}
   healthManager: {fileID: 177707673}
